@@ -15,7 +15,7 @@ export default new Phaser.Game({
   width: vpwidth,
   height: vpheight,
   // сюда будем помешать созданные игровые сцены
-  scene: [],
+  scene: ['start', 'game', 'game-over'],
   // физика
   physics: {
     default: 'arcade',
