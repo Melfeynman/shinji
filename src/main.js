@@ -1,4 +1,7 @@
 import Phaser from './lib/phaser.js';
+import Start from './scene/Start.js';
+import Game from './scene/Game.js';
+import GameOver from './scene/GameOver.js';
 
 // узнаём размеры вьюпорта
 const vpwidth = window.innerWidth;
@@ -11,8 +14,8 @@ export default new Phaser.Game({
   // задаём размеры канваса
   width: vpwidth,
   height: vpheight,
-  // сюда будем помешать созданные игровые сцены
-  scene: [],
+  // сюда будем помещать созданные игровые сцены
+  scene: ['start', 'game', 'game-over'],
   // физика
   physics: {
     default: 'arcade',
