@@ -14,7 +14,7 @@ export default new Phaser.Game({
   // задаём размеры канваса
   width: vpwidth,
   height: vpheight,
-  // сюда будем помешать созданные игровые сцены
+  // сюда будем помещать созданные игровые сцены
   scene: ['start', 'game', 'game-over'],
   // физика
   physics: {
