@@ -8,7 +8,7 @@ export default new Phaser.Game ({
   type: Phaser.AUTO,
   width: vpwidth,
   height: vpheight,
-  scene: 'game',
+  scene: Game,
   physics: {
     default: 'arcade',
     arcade: {

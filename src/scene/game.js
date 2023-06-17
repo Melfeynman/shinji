@@ -1,7 +1,18 @@
 import Phaser from '../lib/phaser.js';
 
+const vpwidth = window.innerWidth;
+const vpheight = window.innerHeight;
+
 export default class Game extends Phaser.Scene {
   constructor() {
     super('game');
+  }
+
+  preload() {
+    this.load.image('background', 'assets/test-image.jpg');
+  }
+
+  create() {
+    this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background');
   }
 }
