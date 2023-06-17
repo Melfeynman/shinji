@@ -1,7 +1,5 @@
 import Phaser from './lib/phaser.js';
-import Start from './scene/Start.js';
 import Game from './scene/Game.js';
-import GameOver from './scene/GameOver.js';
 
 // узнаём размеры вьюпорта
 const vpwidth = window.innerWidth;
