@@ -8,11 +8,21 @@ export default class Game extends Phaser.Scene {
     super('game');
   }
 
+  background;
+
   preload() {
     this.load.image('background', 'assets/test-image.jpg');
   }
 
   create() {
-    this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background');
+    this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background')
+  }
+
+  update() {
+    this.resizeBg(this.background);
+  }
+
+  resizeBg(bg) {
+    vpwidth > vpheight ? bg.setDisplaySize(vpwidth, vpwidth) : bg.setDisplaySize(vpheight, vpheight);
   }
 }
