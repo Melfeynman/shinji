@@ -1,22 +1,14 @@
 import Phaser from './lib/phaser.js';
-import Start from './scene/Start.js';
-import Game from './scene/Game.js';
-import GameOver from './scene/GameOver.js';
+import Game from './scene/game.js';
 
-// узнаём размеры вьюпорта
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
 
-// задаём настройки игры
-export default new Phaser.Game({
-  // выбираем автоматический выбор отображения
+export default new Phaser.Game ({
   type: Phaser.AUTO,
-  // задаём размеры канваса
   width: vpwidth,
   height: vpheight,
-  // сюда будем помещать созданные игровые сцены
-  scene: ['start', 'game', 'game-over'],
-  // физика
+  scene: Game,
   physics: {
     default: 'arcade',
     arcade: {
