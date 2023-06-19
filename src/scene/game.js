@@ -1,5 +1,4 @@
 import Phaser from '../lib/phaser.js';
-import Block from '../game/Block.js'
 
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
