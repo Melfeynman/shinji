@@ -2,6 +2,7 @@ import Phaser from '../lib/phaser.js';
 
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
+const blockSize = Math.round(vpwidth * 0.05);
 
 export default class Game extends Phaser.Scene {
   constructor() {
