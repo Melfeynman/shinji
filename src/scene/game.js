@@ -1,4 +1,5 @@
 import Phaser from '../lib/phaser.js';
+import Block from '../game/Block.js'
 
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
@@ -19,6 +20,7 @@ export default class Game extends Phaser.Scene {
 
   create() {
     this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background');
+    this.blocks = this.physics.add.group({ classType: Block });
   }
 
   update() {
