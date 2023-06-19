@@ -11,6 +11,7 @@ export default class Game extends Phaser.Scene {
 
   background;
   gridCoordinates = { x: [0], y: [0] };
+  blocks;
 
   preload() {
     this.load.image('background', 'assets/test-image.jpg');
@@ -42,5 +43,9 @@ export default class Game extends Phaser.Scene {
     for (let i = 1; i <= rowsCount; i++) {
       this.gridCoordinates.y.push(steps += blockSize);
     }
+  }
+
+  staticMapGen() {
+
   }
 }
