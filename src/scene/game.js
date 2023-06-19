@@ -11,7 +11,7 @@ export default class Game extends Phaser.Scene {
   }
 
   background;
-  gridCoordinates = { x: [0], y: [0] };
+  gridCoordinates = { x: [0], y: [] };
   blocks;
 
   preload() {
@@ -20,12 +20,15 @@ export default class Game extends Phaser.Scene {
 
   create() {
     this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background');
-    this.blocks = this.physics.add.group({ classType: Block });
+    this.makeGrid();
+    console.log(this.gridCoordinates);
+    this.blocks = this.physics.add.staticGroup();
+    this.staticMapGen(0);
+    this.staticMapGen(1);
   }
 
   update() {
     this.resizeBg(this.background);
-    this.makeGrid();
   }
 
   resizeBg(bg) {
@@ -34,20 +37,27 @@ export default class Game extends Phaser.Scene {
 
   makeGrid() {
     this.gridCoordinates.x = [0];
-    this.gridCoordinates.y = [0];
+    this.gridCoordinates.y = [];
     const columnsCount = Math.floor(vpwidth / blockSize) + 1;
     const rowsCount = Math.floor(vpheight / blockSize) + 1;
-    let steps = 0;
+    let steps = 0 - blockSize / 2;
     for (let i = 1; i <= columnsCount; i++) {
       this.gridCoordinates.x.push(steps += blockSize);
     }
-    steps = 0;
+    steps = vpheight + blockSize / 2;
     for (let i = 1; i <= rowsCount; i++) {
-      this.gridCoordinates.y.push(steps += blockSize);
+      this.gridCoordinates.y.push(steps -= blockSize);
     }
   }
 
-  staticMapGen() {
+  staticMapGen(yCount) {
+    for (let i = 0; i < this.gridCoordinates.x.length; i++) {
+      const blockX = this.gridCoordinates.x[i];
+      const blockY = this.gridCoordinates.y[yCount];
+      const block = this.blocks.create(blockX, blockY)
+        .setSize(blockSize, blockSize)
+        .setDisplaySize(blockSize, blockSize);
+    }
   }
 
   dinamicMapGen() {}
