@@ -30,6 +30,8 @@ export default class Game extends Phaser.Scene {
   }
 
   makeGrid() {
+    this.gridCoordinates.x = [0];
+    this.gridCoordinates.y = [0];
     const columnsCount = Math.floor(vpwidth / blockSize) + 1;
     const rowsCount = Math.floor(vpheight / blockSize) + 1;
     let steps = 0;
