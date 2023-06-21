@@ -60,6 +60,7 @@ export default class Game extends Phaser.Scene {
   }
 
   staticMapGen(yCount) {
+    // создаёт блоки по всем x и по указанному y
     for (let i = 0; i < this.gridCoordinates.x.length; i++) {
       const blockX = this.gridCoordinates.x[i];
       const blockY = this.gridCoordinates.y[yCount];
