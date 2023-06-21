@@ -35,9 +35,8 @@ export default class Game extends Phaser.Scene {
   update() {
     // изменяет размер фона при изменении вьюпорта
     this.resizeBg(this.background);
-
     const mostRightGridX = this.gridCoordinates.x[this.gridCoordinates.x.length - 1];
-    // место для dinamicMapGen()
+    this.checkLastGridColumn(mostRightGridX);
   }
 
   resizeBg(bg) {
@@ -70,21 +69,34 @@ export default class Game extends Phaser.Scene {
     }
   }
 
-  dinamicMapGen() {
+  dinamicMapGen(mostRightGridX) {
     let possibility = Math.random();
-    console.log(possibility);
+    console.log('someone has called me');
     // проходится по всей самой крайней колонке справа
     for (let i = 0; i < this.gridCoordinates.y.length; i++) {
       // с вероятность 0.5 создаёт в ячейке блок
       if (possibility > 0.5) {
-        console.log(possibility);
         const blockY = this.gridCoordinates.y[i];
         this.blocks.create(mostRightGridX, blockY)
           .setSize(blockSize, blockSize)
           .setDisplaySize(blockSize, blockSize);
+        console.log('i have just ganerated a new block!');
       }
       // генерирует новую вероятность
       possibility = Math.random();
     }
+  }
+
+  checkLastGridColumn(mostRightGridX) {
+    console.log('fn is on its watch');
+    let count = 0;
+    this.blocks.getChildren().map((block) => {
+      const halfBlockWidth = Math.round(blockSize / 2);
+      if (block.x + halfBlockWidth > mostRightGridX) count++;
+    });
+    if (count > 0) {
+      console.log('i work');
+      this.dinamicMapGen(mostRightGridX);
+    };
   }
 }
