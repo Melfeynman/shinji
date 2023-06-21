@@ -10,7 +10,7 @@ export default class Game extends Phaser.Scene {
   }
 
   background;
-  gridCoordinates = { x: [0], y: [] };
+  gridCoordinates = { x: [], y: [] };
   blocks;
 
   preload() {
@@ -28,6 +28,9 @@ export default class Game extends Phaser.Scene {
 
   update() {
     this.resizeBg(this.background);
+
+    const mostRightGridX = this.gridCoordinates.x[this.gridCoordinates.x.length - 1];
+    // место для dinamicMapGen()
   }
 
   resizeBg(bg) {
@@ -35,7 +38,7 @@ export default class Game extends Phaser.Scene {
   }
 
   makeGrid() {
-    this.gridCoordinates.x = [0];
+    this.gridCoordinates.x = [];
     this.gridCoordinates.y = [];
     const columnsCount = Math.floor(vpwidth / blockSize) + 1;
     const rowsCount = Math.floor(vpheight / blockSize) + 1;
@@ -53,11 +56,24 @@ export default class Game extends Phaser.Scene {
     for (let i = 0; i < this.gridCoordinates.x.length; i++) {
       const blockX = this.gridCoordinates.x[i];
       const blockY = this.gridCoordinates.y[yCount];
-      const block = this.blocks.create(blockX, blockY)
+      this.blocks.create(blockX, blockY)
         .setSize(blockSize, blockSize)
         .setDisplaySize(blockSize, blockSize);
     }
   }
 
-  dinamicMapGen() {}
+  dinamicMapGen() {
+    let possibility = Math.random();
+    console.log(possibility);
+    for (let i = 0; i < this.gridCoordinates.y.length; i++) {
+      if (possibility > 0.5) {
+        console.log(possibility);
+        const blockY = this.gridCoordinates.y[i];
+        this.blocks.create(mostRightGridX, blockY)
+          .setSize(blockSize, blockSize)
+          .setDisplaySize(blockSize, blockSize);
+      }
+      possibility = Math.random();
+    }
+  }
 }
