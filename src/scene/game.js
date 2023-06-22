@@ -36,6 +36,7 @@ export default class Game extends Phaser.Scene {
     // изменяет размер фона при изменении вьюпорта
     this.resizeBg(this.background);
     const mostRightGridX = this.gridCoordinates.x[this.gridCoordinates.x.length - 1];
+    // проверяет посленюю колонку на наличие блоков и вызывает генератор
     this.checkLastGridColumn(mostRightGridX);
   }
 
@@ -90,11 +91,13 @@ export default class Game extends Phaser.Scene {
   checkLastGridColumn(mostRightGridX) {
     console.log('fn is on its watch');
     let count = 0;
+    // считает блоки, у которых правая граница находится в пределах последней колонки
     this.blocks.getChildren().map((block) => {
       const halfBlockWidth = Math.round(blockSize / 2);
-      if (block.x + halfBlockWidth > mostRightGridX) count++;
+      if (block.x + halfBlockWidth >= mostRightGridX) count++;
     });
-    if (count > 0) {
+    // вызывает генератор, если таких блоков нет
+    if (count === 0) {
       console.log('i work');
       this.dinamicMapGen(mostRightGridX);
     };
