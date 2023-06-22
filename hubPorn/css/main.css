@@ -1,0 +1,163 @@
+body {
+    background: url(../img/mainBack.png) no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0px 0px 60px 25px black; 
+}
+
+.lap-start {
+    display: flex;
+    min-width: 860px;
+    min-height: 270px;
+
+}
+
+.red-dottes {
+    width: 30%;
+    border: 5px dashed red;
+}
+
+.red-dottes-inner {
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+}
+
+.red-box {
+    width: 110px;
+    height: 100px;
+    position: relative;
+    background-color: black;
+}
+
+.red-box-dbl {
+    z-index: 2;
+}
+
+
+
+.red-box::after {
+    content: '';
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    margin: auto;
+    position: absolute;
+    border-radius: 20px;
+    transform: translate(-50%, -50%);
+    background-color: var(--dark-color);
+}
+
+.start-cell {
+    width: 70%;
+    display: flex;
+    margin-top: 20px;
+    background-color: black;
+}
+
+.start-btn-box {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.start-btn {
+    width: 60%;
+    height: 60%;
+    border-radius: 25px;
+    background-color: var(--dark-color);
+}
+
+
+.start-name {
+    width: 50%;
+    display: flex;
+    font-size: 50px;
+    font-weight: 300;
+    padding-left: 20px;
+    align-items: center;
+    color: var(--main-color);
+    
+    position: relative;
+}
+
+.start-name::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 70%;
+    top: 15%;
+    left: 0;
+    padding-left: 0px;
+    background-color: #F21BD9;
+}
+
+/* Game */
+
+/* EndGame */
+.score-cell { 
+    width: 70%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    background-color: black;
+}
+
+.score-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.score {
+    /* height: 100%; */
+    padding: 0 20px;
+    font-size: 40px;
+    color: var(--main-color);
+}
+
+.score-sqr {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.score-sqr-inner {
+    width: 60%;
+    height: 60%;
+    border-radius: 25px;
+    background-color: var(--dark-color);
+
+}
+
+.score-sqr::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 70%;
+    top: 15%;
+    left: 0;
+    padding-left: 0px;
+    background-color: #F21BD9;
+}
+
+
+
+
+
