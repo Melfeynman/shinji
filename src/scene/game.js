@@ -92,10 +92,11 @@ export default class Game extends Phaser.Scene {
   checkLastGridColumn(mostRightGridX) {
     console.log('fn is on its watch');
     let count = 0;
+    const mostRightX = this.cameras.main.scrollX + mostRightGridX;
     // считает блоки, у которых правая граница находится в пределах последней колонки
     this.blocks.getChildren().map((block) => {
       const halfBlockWidth = Math.round(blockSize / 2);
-      if (block.x + halfBlockWidth >= mostRightGridX) count++;
+      if (block.x + halfBlockWidth >= mostRightX) count++;
     });
     // вызывает генератор, если таких блоков нет
     if (count === 0) {
