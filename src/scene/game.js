@@ -77,8 +77,9 @@ export default class Game extends Phaser.Scene {
     for (let i = 0; i < this.gridCoordinates.y.length; i++) {
       // с вероятность 0.5 создаёт в ячейке блок
       if (possibility > 0.5) {
+        const blockX = this.cameras.main.scrollX + mostRightGridX;
         const blockY = this.gridCoordinates.y[i];
-        this.blocks.create(mostRightGridX, blockY)
+        this.blocks.create(blockX, blockY)
           .setSize(blockSize, blockSize)
           .setDisplaySize(blockSize, blockSize);
         console.log('i have just ganerated a new block!');
