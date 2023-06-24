@@ -13,6 +13,7 @@ export default class Game extends Phaser.Scene {
   // воображаемая грид-сетка для удобства создания карты. Содержит координаты центров ячеек
   gridCoordinates = { x: [], y: [] };
   blocks;
+  camerasCenter;
 
   preload() {
     // надо заменить фон позднее
@@ -30,6 +31,14 @@ export default class Game extends Phaser.Scene {
     this.staticMapGen(0);
     // второй слой блоков
     this.staticMapGen(1);
+
+    this.camerasCenter = this.physics.add.image()
+      .setGravityY(-200)
+      .setVisible(0)
+      .setPosition(vpwidth / 2, vpheight / 2)
+      .setVelocityX(200);
+
+    this.cameras.main.startFollow(this.camerasCenter);
   }
 
   update() {
