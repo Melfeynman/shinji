@@ -69,19 +69,6 @@ button {
     --dark-color: #3c0636;
 }
 
-.arrow {
-    width: 0; 
-    height: 0; 
-    border-left: 80px solid var(--main-color);
-    border-top: 50px solid transparent;
-    border-bottom: 50px solid transparent;
-    clip-path: polygon(20% 20%, 20% 90%, 90% 51%);
-  }
-
 .shadow {
     box-shadow: 9px 0 28px #5A1DA0;
-}
-
-.shadow-upLeft {
-    box-shadow: -9px 0 28px #5A1DA0;
 }
