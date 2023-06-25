@@ -42,9 +42,9 @@ export default class Game extends Phaser.Scene {
     this.cameras.main.startFollow(this.camerasCenter);
 
     this.createPlayer();
-    this.createScore();
-    this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
-		this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
+    // this.createScore();
+    // this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
+		// this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
   }
 
   update() {
@@ -54,8 +54,8 @@ export default class Game extends Phaser.Scene {
     // проверяет посленюю колонку на наличие блоков и вызывает генератор
     this.checkLastGridColumn(mostRightGridX);
 
-    this.game.physics.arcade.collide(this.player, this.floor);
-		this.game.physics.arcade.collide(this.player, this.boxes, this.gameOver, null, this);
+    // this.game.physics.arcade.collide(this.player, this.floor);
+		// this.game.physics.arcade.collide(this.player, this.boxes, this.gameOver, null, this);
 
 		var onTheGround = this.player.body.touching.down;
 
@@ -83,7 +83,7 @@ export default class Game extends Phaser.Scene {
 		var isActive = false;
 
 		isActive = this.input.keyboard.downDuration(Phaser.Keyboard.UP, duration);
-		isActive |= (this.game.input.activePointer.justPressed(duration + 1000 / 60) &&
+		isActive = (this.game.input.activePointer.justPressed(duration + 1000 / 60) &&
 			this.game.input.activePointer.x > this.game.width / 4 &&
 			this.game.input.activePointer.x < this.game.width / 2 + this.game.width / 4);
 
@@ -167,19 +167,21 @@ export default class Game extends Phaser.Scene {
 
   createPlayer() {
 
-		this.player = this.game.add.sprite(this.game.world.width/5, this.game.world.height -
-			(this.tileHeight*2), 'player');
-		this.player.scale.setTo(4, 4);
-		this.player.anchor.setTo(0.5, 1.0);
-		this.game.physics.arcade.enable(this.player);
+		this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
+			(this.tileHeight*2), 'player')
+      .setSize(blockSize, blockSize);
+		// this.player.setScale(4, 4);
+		// this.player.anchor.setTo(0.5, 1.0); ?
+	  // this.game.physics.arcade.enable(this.player);
+    this.player.enableBody();
 		this.player.body.gravity.y = 2200;
 		this.player.body.collideWorldBounds = true;
 		this.player.body.bounce.y = 0.1;
 		this.player.body.drag.x = 150;
-		var walk = this.player.animations.add('walk');
-		this.player.animations.play('walk', 20, true);
+		var walk = this.player.anims.create('walk');
+		this.player.anims.play('walk', 20, true);
   }
-
+/*
   createScore() {
 
 		var scoreFont = "70px Arial";
@@ -211,5 +213,5 @@ export default class Game extends Phaser.Scene {
 		this.highestScore.setText("HS: " + window.localStorage.getItem('Highest Score'));
 		this.game.world.bringToTop(this.highestScore);
 	}
-
+*/
 }
