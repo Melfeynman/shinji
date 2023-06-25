@@ -14,6 +14,8 @@ export default class Game extends Phaser.Scene {
   gridCoordinates = { x: [], y: [] };
   blocks;
   camerasCenter;
+  player;
+  cursor;
 
   preload() {
     // надо заменить фон позднее
@@ -42,9 +44,11 @@ export default class Game extends Phaser.Scene {
     this.cameras.main.startFollow(this.camerasCenter);
 
     this.createPlayer();
+    this.physics.add.collider(this.player, this.blocks);
     // this.createScore();
     // this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
 		// this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
+    this.cursor = this.input.keyboard.createCursorKeys();
   }
 
   update() {
@@ -66,16 +70,34 @@ export default class Game extends Phaser.Scene {
 		}
 
 		// Прыжок
+    /*
 		if (this.jumps > 0 && this.upInputIsActive(5)) {
 			this.player.body.velocity.y = -1000;
 			this.jumping = true;
 		}
+    */
+   if (this.jumps > 0 && this.cursor.up.isDown) {
+    this.player.setVelocityY(-200);
+    this.jumping = true;
+   }
 
 		// Уменьшаем количество возможных прыжков после использования
+    /*
 		if (this.jumping && this.upInputReleased()) {
 			this.jumps--;
 			this.jumping = false;
 		}
+    */
+   if (this.jumping && !this.cursor.up.isDown) {
+    this.jumps--;
+    this.jumping = false;
+   }
+
+   if (this.player.x < this.cameras.main.centerX) {
+    this.player.setVelocityX(250);
+   } else {
+    this.player.setVelocityX(200);
+   }
   }
 
 
@@ -95,7 +117,7 @@ export default class Game extends Phaser.Scene {
 		var released = false;
 
 		released = this.input.keyboard.upDuration(Phaser.Keyboard.UP);
-		released |= this.game.input.activePointer.justReleased();
+		released = this.game.input.activePointer.justReleased();
 
 		return released;
 	}
@@ -132,7 +154,6 @@ export default class Game extends Phaser.Scene {
 
   dinamicMapGen(mostRightGridX) {
     let possibility = Math.random();
-    console.log('someone has called me');
     // проходится по всей самой крайней колонке справа
     for (let i = 0; i < this.gridCoordinates.y.length; i++) {
       // с вероятность 0.1 создаёт в ячейке блок
@@ -143,7 +164,6 @@ export default class Game extends Phaser.Scene {
         this.blocks.create(blockX, blockY)
           .setSize(blockSize, blockSize)
           .setDisplaySize(blockSize, blockSize);
-        console.log('i have just ganerated a new block!');
       }
       // генерирует новую вероятность
       possibility = Math.random();
@@ -160,24 +180,28 @@ export default class Game extends Phaser.Scene {
     });
     // вызывает генератор, если таких блоков нет
     if (count === 0) {
-      console.log('i work');
       this.dinamicMapGen(mostRightGridX);
     };
   }
 
   createPlayer() {
 
-		this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
-			(this.tileHeight*2), 'player')
-      .setSize(blockSize, blockSize);
+		//this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
+		//	(this.tileHeight*2), 'player')
+    //  .setSize(blockSize, blockSize);
+    const playerX = this.cameras.main.centerX;
+    const playerY = this.gridCoordinates.y[2];
+    this.player = this.physics.add.sprite(playerX,playerY)
+      .setSize(blockSize. blockSize)
+      .setVelocityX(200);
 		// this.player.setScale(4, 4);
 		// this.player.anchor.setTo(0.5, 1.0); ?
 	  // this.game.physics.arcade.enable(this.player);
     this.player.enableBody();
-		this.player.body.gravity.y = 2200;
-		this.player.body.collideWorldBounds = true;
+		// this.player.body.gravity.y = 2200;
+		this.player.body.collideWorldBounds = false;
 		this.player.body.bounce.y = 0.1;
-		this.player.body.drag.x = 150;
+		this.player.body.drag.x = 1;
 		var walk = this.player.anims.create('walk');
 		this.player.anims.play('walk', 20, true);
   }
