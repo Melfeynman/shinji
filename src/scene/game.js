@@ -21,7 +21,8 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background');
+    this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background')
+      .setScrollFactor(1, 0);
     // создаёт грид-сетку
     this.makeGrid();
     console.log(this.gridCoordinates);
@@ -84,8 +85,9 @@ export default class Game extends Phaser.Scene {
     console.log('someone has called me');
     // проходится по всей самой крайней колонке справа
     for (let i = 0; i < this.gridCoordinates.y.length; i++) {
-      // с вероятность 0.5 создаёт в ячейке блок
-      if (possibility > 0.5) {
+      // с вероятность 0.1 создаёт в ячейке блок
+      // в ходе продолжения игры можно увеливать вероятность до 0.5, чтобы было сложнее
+      if (possibility > 0.9) {
         const blockX = this.cameras.main.scrollX + mostRightGridX;
         const blockY = this.gridCoordinates.y[i];
         this.blocks.create(blockX, blockY)
@@ -104,8 +106,7 @@ export default class Game extends Phaser.Scene {
     const mostRightX = this.cameras.main.scrollX + mostRightGridX;
     // считает блоки, у которых правая граница находится в пределах последней колонки
     this.blocks.getChildren().map((block) => {
-      const halfBlockWidth = Math.round(blockSize / 2);
-      if (block.x + halfBlockWidth >= mostRightX) count++;
+      if (block.x + blockSize >= mostRightX) count++;
     });
     // вызывает генератор, если таких блоков нет
     if (count === 0) {
