@@ -16,6 +16,10 @@ export default class Game extends Phaser.Scene {
   camerasCenter;
   player;
   cursor;
+  scoreLabel;
+  highestScore;
+  startTime;
+  timer = { mins: 0, secs: 0 };
 
   preload() {
     // надо заменить фон позднее
@@ -23,11 +27,12 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    // запоминаем время начала игры
+    this.startTime = Date.now();
     this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background')
-      .setScrollFactor(1, 0);
+      .setScrollFactor(0.1, 0);
     // создаёт грид-сетку
     this.makeGrid();
-    console.log(this.gridCoordinates);
     // объявляет группу статических элементов в this.blocks
     this.blocks = this.physics.add.staticGroup();
     // первый слой блоков
@@ -35,20 +40,24 @@ export default class Game extends Phaser.Scene {
     // второй слой блоков
     this.staticMapGen(1);
 
+    // создаёт невидимый блок, за которым движется камера
     this.camerasCenter = this.physics.add.image()
       .setGravityY(-200)
       .setVisible(0)
       .setPosition(vpwidth / 2, vpheight / 2)
       .setVelocityX(200);
-
     this.cameras.main.startFollow(this.camerasCenter);
 
+    // создаёт игрока
     this.createPlayer();
+    // добавляет коллизию между игроком и блоками
     this.physics.add.collider(this.player, this.blocks);
-    // this.createScore();
     // this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
 		// this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
+    // добавляет управление
     this.cursor = this.input.keyboard.createCursorKeys();
+    // добавляет текст сётчика сверху
+    this.createScore();
   }
 
   update() {
@@ -98,8 +107,10 @@ export default class Game extends Phaser.Scene {
    } else {
     this.player.setVelocityX(200);
    }
-  }
 
+   // запускает секундомер
+   this.countTime();
+  }
 
   upInputIsActive(duration) {
 		var isActive = false;
@@ -171,7 +182,6 @@ export default class Game extends Phaser.Scene {
   }
 
   checkLastGridColumn(mostRightGridX) {
-    console.log('fn is on its watch');
     let count = 0;
     const mostRightX = this.cameras.main.scrollX + mostRightGridX;
     // считает блоки, у которых правая граница находится в пределах последней колонки
@@ -189,6 +199,8 @@ export default class Game extends Phaser.Scene {
 		//this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
 		//	(this.tileHeight*2), 'player')
     //  .setSize(blockSize, blockSize);
+
+    // помещает игрока в центр на высоту 3его блока, задаёт размер блока и скорость в 200
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
     this.player = this.physics.add.sprite(playerX,playerY)
@@ -197,28 +209,39 @@ export default class Game extends Phaser.Scene {
 		// this.player.setScale(4, 4);
 		// this.player.anchor.setTo(0.5, 1.0); ?
 	  // this.game.physics.arcade.enable(this.player);
+
+    // активирует физическое тело
     this.player.enableBody();
 		// this.player.body.gravity.y = 2200;
+
+    // запрещаем коллизию с границами мира, потому что иначе фигурка не преодолеет границы вьюпорта
 		this.player.body.collideWorldBounds = false;
 		this.player.body.bounce.y = 0.1;
 		this.player.body.drag.x = 1;
-		var walk = this.player.anims.create('walk');
-		this.player.anims.play('walk', 20, true);
+
+    // здесь будет анимация (?)
+		// var walk = this.player.anims.create('walk');
+		// this.player.anims.play('walk', 20, true);
   }
-/*
+
   createScore() {
 
 		var scoreFont = "70px Arial";
 
-		this.scoreLabel = this.game.add.text(this.game.world.centerX, 70, "0", { font: scoreFont, fill: "#fff" });
-		this.scoreLabel.anchor.setTo(0.5, 0.5);
+		this.scoreLabel = this.add.text(this.cameras.main.centerX, 70, "0", { font: scoreFont, fill: "#fff" })
+    this.scoreLabel.scrollFactorX = 0;
+		// this.scoreLabel.anchor.setTo(0.5, 0.5);
 		this.scoreLabel.align = 'center';
-		this.game.world.bringToTop(this.scoreLabel);
+		// this.game.world.bringToTop(this.scoreLabel);
+    this.scoreLabel.y = this.gridCoordinates.y.length - 2;
 
-		this.highestScore = this.game.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
+    // выдаёт ошибку на this.game.world.centerX
+    /*
+		this.highestScore = this.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
 		this.highestScore.anchor.setTo(0.5, 0.5);
 		this.highestScore.align = 'right';
-		this.game.world.bringToTop(this.highestScore);
+    this.highestScore.scrollFactorX = 0;
+    this.highestScore.y = this.gridCoordinates.y.length - 2;
 
 		if (window.localStorage.getItem('Highest Score') == null) {
 			this.highestScore.setText(0);
@@ -227,8 +250,9 @@ export default class Game extends Phaser.Scene {
 		else {
 			this.highestScore.setText(window.localStorage.getItem('Highest Score'));
 		}
+    */
 	}
-
+/*
 	incrementScore() {
 
 		score += 1;
@@ -238,4 +262,14 @@ export default class Game extends Phaser.Scene {
 		this.game.world.bringToTop(this.highestScore);
 	}
 */
+  countTime() {
+    // сравнивает текущее время с сохранённым временем начала игры
+    // и выводит в this.scoreLabel отформатированную разницу
+    const diff = new Date(Date.now() - this.startTime);
+    const strDiff = diff.toString();
+    console.log(strDiff);
+    this.timer.mins = diff.getMinutes();
+    this.timer.secs = diff.getSeconds();
+    this.scoreLabel.text = `${this.timer.mins}:${this.timer.secs}`;
+  }
 }
