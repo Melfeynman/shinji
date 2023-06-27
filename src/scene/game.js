@@ -13,6 +13,13 @@ export default class Game extends Phaser.Scene {
   // воображаемая грид-сетка для удобства создания карты. Содержит координаты центров ячеек
   gridCoordinates = { x: [], y: [] };
   blocks;
+  camerasCenter;
+  player;
+  cursor;
+  scoreLabel;
+  highestScore;
+  startTime;
+  timer = { mins: 0, secs: 0 };
 
   preload() {
     // надо заменить фон позднее
@@ -20,10 +27,12 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background');
+    // запоминаем время начала игры
+    this.startTime = Date.now();
+    this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background')
+      .setScrollFactor(0.1, 0);
     // создаёт грид-сетку
     this.makeGrid();
-    console.log(this.gridCoordinates);
     // объявляет группу статических элементов в this.blocks
     this.blocks = this.physics.add.staticGroup();
     // первый слой блоков
@@ -31,11 +40,24 @@ export default class Game extends Phaser.Scene {
     // второй слой блоков
     this.staticMapGen(1);
 
+    // создаёт невидимый блок, за которым движется камера
+    this.camerasCenter = this.physics.add.image()
+      .setGravityY(-200)
+      .setVisible(0)
+      .setPosition(vpwidth / 2, vpheight / 2)
+      .setVelocityX(200);
+    this.cameras.main.startFollow(this.camerasCenter);
 
+    // создаёт игрока
     this.createPlayer();
+    // добавляет коллизию между игроком и блоками
+    this.physics.add.collider(this.player, this.blocks);
+    // this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
+		// this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
+    // добавляет управление
+    this.cursor = this.input.keyboard.createCursorKeys();
+    // добавляет текст сётчика сверху
     this.createScore();
-    this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
-		this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
   }
 
   update() {
@@ -45,8 +67,8 @@ export default class Game extends Phaser.Scene {
     // проверяет посленюю колонку на наличие блоков и вызывает генератор
     this.checkLastGridColumn(mostRightGridX);
 
-    this.game.physics.arcade.collide(this.player, this.floor);
-		this.game.physics.arcade.collide(this.player, this.boxes, this.gameOver, null, this);
+    // this.game.physics.arcade.collide(this.player, this.floor);
+		// this.game.physics.arcade.collide(this.player, this.boxes, this.gameOver, null, this);
 
 		var onTheGround = this.player.body.touching.down;
 
@@ -57,24 +79,44 @@ export default class Game extends Phaser.Scene {
 		}
 
 		// Прыжок
+    /*
 		if (this.jumps > 0 && this.upInputIsActive(5)) {
 			this.player.body.velocity.y = -1000;
 			this.jumping = true;
 		}
+    */
+   if (this.jumps > 0 && this.cursor.up.isDown) {
+    this.player.setVelocityY(-200);
+    this.jumping = true;
+   }
 
 		// Уменьшаем количество возможных прыжков после использования
+    /*
 		if (this.jumping && this.upInputReleased()) {
 			this.jumps--;
 			this.jumping = false;
 		}
-  }
+    */
+   if (this.jumping && !this.cursor.up.isDown) {
+    this.jumps--;
+    this.jumping = false;
+   }
 
+   if (this.player.x < this.cameras.main.centerX) {
+    this.player.setVelocityX(250);
+   } else {
+    this.player.setVelocityX(200);
+   }
+
+   // запускает секундомер
+   this.countTime();
+  }
 
   upInputIsActive(duration) {
 		var isActive = false;
 
 		isActive = this.input.keyboard.downDuration(Phaser.Keyboard.UP, duration);
-		isActive |= (this.game.input.activePointer.justPressed(duration + 1000 / 60) &&
+		isActive = (this.game.input.activePointer.justPressed(duration + 1000 / 60) &&
 			this.game.input.activePointer.x > this.game.width / 4 &&
 			this.game.input.activePointer.x < this.game.width / 2 + this.game.width / 4);
 
@@ -86,7 +128,7 @@ export default class Game extends Phaser.Scene {
 		var released = false;
 
 		released = this.input.keyboard.upDuration(Phaser.Keyboard.UP);
-		released |= this.game.input.activePointer.justReleased();
+		released = this.game.input.activePointer.justReleased();
 
 		return released;
 	}
@@ -123,16 +165,16 @@ export default class Game extends Phaser.Scene {
 
   dinamicMapGen(mostRightGridX) {
     let possibility = Math.random();
-    console.log('someone has called me');
     // проходится по всей самой крайней колонке справа
     for (let i = 0; i < this.gridCoordinates.y.length; i++) {
-      // с вероятность 0.5 создаёт в ячейке блок
-      if (possibility > 0.5) {
+      // с вероятность 0.1 создаёт в ячейке блок
+      // в ходе продолжения игры можно увеливать вероятность до 0.5, чтобы было сложнее
+      if (possibility > 0.9) {
+        const blockX = this.cameras.main.scrollX + mostRightGridX;
         const blockY = this.gridCoordinates.y[i];
-        this.blocks.create(mostRightGridX, blockY)
+        this.blocks.create(blockX, blockY)
           .setSize(blockSize, blockSize)
           .setDisplaySize(blockSize, blockSize);
-        console.log('i have just ganerated a new block!');
       }
       // генерирует новую вероятность
       possibility = Math.random();
@@ -140,48 +182,66 @@ export default class Game extends Phaser.Scene {
   }
 
   checkLastGridColumn(mostRightGridX) {
-    console.log('fn is on its watch');
     let count = 0;
+    const mostRightX = this.cameras.main.scrollX + mostRightGridX;
     // считает блоки, у которых правая граница находится в пределах последней колонки
     this.blocks.getChildren().map((block) => {
-      const halfBlockWidth = Math.round(blockSize / 2);
-      if (block.x + halfBlockWidth >= mostRightGridX) count++;
+      if (block.x + blockSize >= mostRightX) count++;
     });
     // вызывает генератор, если таких блоков нет
     if (count === 0) {
-      console.log('i work');
       this.dinamicMapGen(mostRightGridX);
     };
   }
 
   createPlayer() {
 
-		this.player = this.game.add.sprite(this.game.world.width/5, this.game.world.height -
-			(this.tileHeight*2), 'player');
-		this.player.scale.setTo(4, 4);
-		this.player.anchor.setTo(0.5, 1.0);
-		this.game.physics.arcade.enable(this.player);
-		this.player.body.gravity.y = 2200;
-		this.player.body.collideWorldBounds = true;
+		//this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
+		//	(this.tileHeight*2), 'player')
+    //  .setSize(blockSize, blockSize);
+
+    // помещает игрока в центр на высоту 3его блока, задаёт размер блока и скорость в 200
+    const playerX = this.cameras.main.centerX;
+    const playerY = this.gridCoordinates.y[2];
+    this.player = this.physics.add.sprite(playerX,playerY)
+      .setSize(blockSize. blockSize)
+      .setVelocityX(200);
+		// this.player.setScale(4, 4);
+		// this.player.anchor.setTo(0.5, 1.0); ?
+	  // this.game.physics.arcade.enable(this.player);
+
+    // активирует физическое тело
+    this.player.enableBody();
+		// this.player.body.gravity.y = 2200;
+
+    // запрещаем коллизию с границами мира, потому что иначе фигурка не преодолеет границы вьюпорта
+		this.player.body.collideWorldBounds = false;
 		this.player.body.bounce.y = 0.1;
-		this.player.body.drag.x = 150;
-		var walk = this.player.animations.add('walk');
-		this.player.animations.play('walk', 20, true);
+		this.player.body.drag.x = 1;
+
+    // здесь будет анимация (?)
+		// var walk = this.player.anims.create('walk');
+		// this.player.anims.play('walk', 20, true);
   }
 
   createScore() {
 
 		var scoreFont = "70px Arial";
 
-		this.scoreLabel = this.game.add.text(this.game.world.centerX, 70, "0", { font: scoreFont, fill: "#fff" });
-		this.scoreLabel.anchor.setTo(0.5, 0.5);
+		this.scoreLabel = this.add.text(this.cameras.main.centerX, 70, "0", { font: scoreFont, fill: "#fff" })
+    this.scoreLabel.scrollFactorX = 0;
+		// this.scoreLabel.anchor.setTo(0.5, 0.5);
 		this.scoreLabel.align = 'center';
-		this.game.world.bringToTop(this.scoreLabel);
+		// this.game.world.bringToTop(this.scoreLabel);
+    this.scoreLabel.y = this.gridCoordinates.y.length - 2;
 
-		this.highestScore = this.game.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
+    // выдаёт ошибку на this.game.world.centerX
+    /*
+		this.highestScore = this.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
 		this.highestScore.anchor.setTo(0.5, 0.5);
 		this.highestScore.align = 'right';
-		this.game.world.bringToTop(this.highestScore);
+    this.highestScore.scrollFactorX = 0;
+    this.highestScore.y = this.gridCoordinates.y.length - 2;
 
 		if (window.localStorage.getItem('Highest Score') == null) {
 			this.highestScore.setText(0);
@@ -190,8 +250,9 @@ export default class Game extends Phaser.Scene {
 		else {
 			this.highestScore.setText(window.localStorage.getItem('Highest Score'));
 		}
+    */
 	}
-
+/*
 	incrementScore() {
 
 		score += 1;
@@ -200,5 +261,14 @@ export default class Game extends Phaser.Scene {
 		this.highestScore.setText("HS: " + window.localStorage.getItem('Highest Score'));
 		this.game.world.bringToTop(this.highestScore);
 	}
-
+*/
+  countTime() {
+    // сравнивает текущее время с сохранённым временем начала игры
+    // и выводит в this.scoreLabel отформатированную разницу
+    const diff = new Date(Date.now() - this.startTime);
+    const strDiff = diff.toString();
+    this.timer.mins = diff.getMinutes();
+    this.timer.secs = diff.getSeconds();
+    this.scoreLabel.text = `${this.timer.mins}:${this.timer.secs}`;
+  }
 }
