@@ -267,7 +267,6 @@ export default class Game extends Phaser.Scene {
     // и выводит в this.scoreLabel отформатированную разницу
     const diff = new Date(Date.now() - this.startTime);
     const strDiff = diff.toString();
-    console.log(strDiff);
     this.timer.mins = diff.getMinutes();
     this.timer.secs = diff.getSeconds();
     this.scoreLabel.text = `${this.timer.mins}:${this.timer.secs}`;
