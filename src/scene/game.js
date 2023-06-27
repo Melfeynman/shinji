@@ -3,6 +3,7 @@ import Phaser from '../lib/phaser.js';
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
 const blockSize = Math.round(vpwidth * 0.05);
+const mainMenu = document.querySelector('#main-menu');
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -27,6 +28,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    mainMenu.style.display = 'none';
     // запоминаем время начала игры
     this.startTime = Date.now();
     this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background')
