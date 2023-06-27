@@ -1,5 +1,7 @@
 import Phaser from './lib/phaser.js';
+import Start from './scene/start.js';
 import Game from './scene/game.js';
+import Over from './scene/game-over.js';
 
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
@@ -9,7 +11,7 @@ export default new Phaser.Game ({
   type: Phaser.AUTO,
   width: vpwidth,
   height: vpheight,
-  scene: Game,
+  scene: [Start, Game, Over],
   physics: {
     default: 'arcade',
     arcade: {

@@ -1,15 +1,25 @@
 body {
-    background: url(../img/mainBack.png) no-repeat;
+    background: url(../assets/mainBack.png) no-repeat;
     background-position: center;
     background-size: cover;
+    position: relative;
 }
 
 .wrapper {
     height: 100vh;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0px 0px 60px 25px black; 
+    box-shadow: inset 0px 0px 60px 25px black;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.wrapper {
+    display: none;
 }
 
 .lap-start {

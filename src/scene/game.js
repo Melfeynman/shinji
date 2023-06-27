@@ -1,8 +1,10 @@
 import Phaser from '../lib/phaser.js';
+import Over from './game-over.js';
 
 const vpwidth = window.innerWidth;
 const vpheight = window.innerHeight;
 const blockSize = Math.round(vpwidth * 0.05);
+const mainMenu = document.querySelector('#main-menu');
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -27,9 +29,10 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    mainMenu.style.display = 'none';
     // запоминаем время начала игры
     this.startTime = Date.now();
-    this.background = this.add.image(Math.round(vpwidth / 2) , Math.round(vpheight / 2), 'background')
+    this.background = this.add.image(Math.round(vpwidth / 2), Math.round(vpheight / 2), 'background')
       .setScrollFactor(0.1, 0);
     // создаёт грид-сетку
     this.makeGrid();
@@ -53,7 +56,7 @@ export default class Game extends Phaser.Scene {
     // добавляет коллизию между игроком и блоками
     this.physics.add.collider(this.player, this.blocks);
     // this.timer = game.time.events.loop(this.rate, this.addObstacles, this);
-		// this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
+    // this.Scoretimer = game.time.events.loop(100, this.incrementScore, this);
     // добавляет управление
     this.cursor = this.input.keyboard.createCursorKeys();
     // добавляет текст сётчика сверху
@@ -68,70 +71,78 @@ export default class Game extends Phaser.Scene {
     this.checkLastGridColumn(mostRightGridX);
 
     // this.game.physics.arcade.collide(this.player, this.floor);
-		// this.game.physics.arcade.collide(this.player, this.boxes, this.gameOver, null, this);
+    // this.game.physics.arcade.collide(this.player, this.boxes, this.gameOver, null, this);
 
-		var onTheGround = this.player.body.touching.down;
+    var onTheGround = this.player.body.touching.down;
 
-		// Если игрок коснулся земли, он получает 2 прыжка (можно поменять количество)
-		if (onTheGround) {
-			this.jumps = 2;
-			this.jumping = false;
-		}
+    // Если игрок коснулся земли, он получает 2 прыжка (можно поменять количество)
+    if (onTheGround) {
+      this.jumps = 2;
+      this.jumping = false;
+    }
 
-		// Прыжок
+    // Прыжок
     /*
-		if (this.jumps > 0 && this.upInputIsActive(5)) {
-			this.player.body.velocity.y = -1000;
-			this.jumping = true;
-		}
+    if (this.jumps > 0 && this.upInputIsActive(5)) {
+      this.player.body.velocity.y = -1000;
+      this.jumping = true;
+    }
     */
-   if (this.jumps > 0 && this.cursor.up.isDown) {
-    this.player.setVelocityY(-200);
-    this.jumping = true;
-   }
+    if (this.jumps > 0 && this.cursor.up.isDown) {
+      this.player.setVelocityY(-200);
+      this.jumping = true;
+    }
 
-		// Уменьшаем количество возможных прыжков после использования
+    // Уменьшаем количество возможных прыжков после использования
     /*
-		if (this.jumping && this.upInputReleased()) {
-			this.jumps--;
-			this.jumping = false;
-		}
+    if (this.jumping && this.upInputReleased()) {
+      this.jumps--;
+      this.jumping = false;
+    }
     */
-   if (this.jumping && !this.cursor.up.isDown) {
-    this.jumps--;
-    this.jumping = false;
-   }
+    if (this.jumping && !this.cursor.up.isDown) {
+      this.jumps--;
+      this.jumping = false;
+    }
 
-   if (this.player.x < this.cameras.main.centerX) {
-    this.player.setVelocityX(250);
-   } else {
-    this.player.setVelocityX(200);
-   }
+    if (this.player.x < this.cameras.main.centerX) {
+      this.player.setVelocityX(250);
+    } else {
+      this.player.setVelocityX(200);
+    }
 
-   // запускает секундомер
-   this.countTime();
+    // запускает секундомер
+    this.countTime();
+   
+    if (this.player.x < this.cameras.main.scrollX - blockSize) {
+      this.scene.start('game-over');
+    }
+    
+    if (this.player.y > this.cameras.main.scrollY + vpheight) {
+      this.scene.start('game-over');
+    }
   }
 
   upInputIsActive(duration) {
-		var isActive = false;
+    var isActive = false;
 
-		isActive = this.input.keyboard.downDuration(Phaser.Keyboard.UP, duration);
-		isActive = (this.game.input.activePointer.justPressed(duration + 1000 / 60) &&
-			this.game.input.activePointer.x > this.game.width / 4 &&
-			this.game.input.activePointer.x < this.game.width / 2 + this.game.width / 4);
+    isActive = this.input.keyboard.downDuration(Phaser.Keyboard.UP, duration);
+    isActive = (this.game.input.activePointer.justPressed(duration + 1000 / 60) &&
+      this.game.input.activePointer.x > this.game.width / 4 &&
+      this.game.input.activePointer.x < this.game.width / 2 + this.game.width / 4);
 
-		return isActive;
-	}
+    return isActive;
+  }
 
-	// Для подсчета прыгнул игрок или нет
-	upInputReleased() {
-		var released = false;
+  // Для подсчета прыгнул игрок или нет
+  upInputReleased() {
+    var released = false;
 
-		released = this.input.keyboard.upDuration(Phaser.Keyboard.UP);
-		released = this.game.input.activePointer.justReleased();
+    released = this.input.keyboard.upDuration(Phaser.Keyboard.UP);
+    released = this.game.input.activePointer.justReleased();
 
-		return released;
-	}
+    return released;
+  }
 
   resizeBg(bg) {
     vpwidth > vpheight ? bg.setDisplaySize(vpwidth, vpwidth) : bg.setDisplaySize(vpheight, vpheight);
@@ -196,72 +207,72 @@ export default class Game extends Phaser.Scene {
 
   createPlayer() {
 
-		//this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
-		//	(this.tileHeight*2), 'player')
+    //this.player = this.physics.add.sprite(vpwidth / 5, vpheight -
+    //	(this.tileHeight*2), 'player')
     //  .setSize(blockSize, blockSize);
 
     // помещает игрока в центр на высоту 3его блока, задаёт размер блока и скорость в 200
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
-    this.player = this.physics.add.sprite(playerX,playerY)
-      .setSize(blockSize. blockSize)
+    this.player = this.physics.add.sprite(playerX, playerY)
+      .setSize(blockSize.blockSize)
       .setVelocityX(200);
-		// this.player.setScale(4, 4);
-		// this.player.anchor.setTo(0.5, 1.0); ?
-	  // this.game.physics.arcade.enable(this.player);
+    // this.player.setScale(4, 4);
+    // this.player.anchor.setTo(0.5, 1.0); ?
+    // this.game.physics.arcade.enable(this.player);
 
     // активирует физическое тело
     this.player.enableBody();
-		// this.player.body.gravity.y = 2200;
+    // this.player.body.gravity.y = 2200;
 
     // запрещаем коллизию с границами мира, потому что иначе фигурка не преодолеет границы вьюпорта
-		this.player.body.collideWorldBounds = false;
-		this.player.body.bounce.y = 0.1;
-		this.player.body.drag.x = 1;
+    this.player.body.collideWorldBounds = false;
+    this.player.body.bounce.y = 0.1;
+    this.player.body.drag.x = 1;
 
     // здесь будет анимация (?)
-		// var walk = this.player.anims.create('walk');
-		// this.player.anims.play('walk', 20, true);
+    // var walk = this.player.anims.create('walk');
+    // this.player.anims.play('walk', 20, true);
   }
 
   createScore() {
 
-		var scoreFont = "70px Arial";
+    var scoreFont = "70px Arial";
 
-		this.scoreLabel = this.add.text(this.cameras.main.centerX, 70, "0", { font: scoreFont, fill: "#fff" })
+    this.scoreLabel = this.add.text(this.cameras.main.centerX, 70, "0", { font: scoreFont, fill: "#fff" })
     this.scoreLabel.scrollFactorX = 0;
-		// this.scoreLabel.anchor.setTo(0.5, 0.5);
-		this.scoreLabel.align = 'center';
-		// this.game.world.bringToTop(this.scoreLabel);
+    // this.scoreLabel.anchor.setTo(0.5, 0.5);
+    this.scoreLabel.align = 'center';
+    // this.game.world.bringToTop(this.scoreLabel);
     this.scoreLabel.y = this.gridCoordinates.y.length - 2;
 
     // выдаёт ошибку на this.game.world.centerX
     /*
-		this.highestScore = this.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
-		this.highestScore.anchor.setTo(0.5, 0.5);
-		this.highestScore.align = 'right';
+    this.highestScore = this.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
+    this.highestScore.anchor.setTo(0.5, 0.5);
+    this.highestScore.align = 'right';
     this.highestScore.scrollFactorX = 0;
     this.highestScore.y = this.gridCoordinates.y.length - 2;
 
-		if (window.localStorage.getItem('Highest Score') == null) {
-			this.highestScore.setText(0);
-			window.localStorage.setItem('Highest Score', 0);
-		}
-		else {
-			this.highestScore.setText(window.localStorage.getItem('Highest Score'));
-		}
+    if (window.localStorage.getItem('Highest Score') == null) {
+      this.highestScore.setText(0);
+      window.localStorage.setItem('Highest Score', 0);
+    }
+    else {
+      this.highestScore.setText(window.localStorage.getItem('Highest Score'));
+    }
     */
-	}
-/*
-	incrementScore() {
-
-		score += 1;
-		this.scoreLabel.setText(score);
-		this.game.world.bringToTop(this.scoreLabel);
-		this.highestScore.setText("HS: " + window.localStorage.getItem('Highest Score'));
-		this.game.world.bringToTop(this.highestScore);
-	}
-*/
+  }
+  /*
+    incrementScore() {
+  
+      score += 1;
+      this.scoreLabel.setText(score);
+      this.game.world.bringToTop(this.scoreLabel);
+      this.highestScore.setText("HS: " + window.localStorage.getItem('Highest Score'));
+      this.game.world.bringToTop(this.highestScore);
+    }
+  */
   countTime() {
     // сравнивает текущее время с сохранённым временем начала игры
     // и выводит в this.scoreLabel отформатированную разницу
