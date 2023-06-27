@@ -1,6 +1,7 @@
 import Phaser from '../lib/phaser.js';
 import Game from './game.js';
 
+const endScreen = document.querySelector('#end-screen');
 const mainMenu = document.querySelector('#main-menu');
 const startBtn = document.querySelector('.start-btn');
 
@@ -10,6 +11,7 @@ export default class Start extends Phaser.Scene {
   }
 
   create() {
+    endScreen.style.display = 'none';
     // показывает .wrapper c главным меню
     mainMenu.style.display = 'flex';
     // начинает новую сцену по клику на кнопку начала игры
@@ -18,5 +20,3 @@ export default class Start extends Phaser.Scene {
     });
   }
 }
-
-// "d:\Users\User-1\Desktop\shinji\mainGame.html"

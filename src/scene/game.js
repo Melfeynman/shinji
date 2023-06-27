@@ -114,14 +114,13 @@ export default class Game extends Phaser.Scene {
     // запускает секундомер
     this.countTime();
    
-    if (this.player.x < this.cameras.main.scrollX) {
+    if (this.player.x < this.cameras.main.scrollX - blockSize) {
       this.scene.start('game-over');
     }
-    /*
+    
     if (this.player.y > this.cameras.main.scrollY + vpheight) {
       this.scene.start('game-over');
     }
-    */
   }
 
   upInputIsActive(duration) {
