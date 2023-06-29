@@ -24,7 +24,9 @@ export default new Phaser.Game ({
     },
   },
   pixelArt: true,
+  /*
   scale: {
     mode: Phaser.Scale.RESIZE,
   },
+  */
 })

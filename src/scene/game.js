@@ -215,8 +215,8 @@ export default class Game extends Phaser.Scene {
     // помещает игрока в центр на высоту 3его блока, задаёт размер блока и скорость в 200
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
-    this.player = this.physics.add.sprite(playerX, playerY)
-      .setSize(blockSize.blockSize)
+    this.player = this.physics.add.sprite(playerX, playerY, 'player-run')
+      .setSize(blockSize, blockSize)
       .setVelocityX(200);
     // this.player.setScale(4, 4);
     // this.player.anchor.setTo(0.5, 1.0); ?
@@ -238,10 +238,10 @@ export default class Game extends Phaser.Scene {
         start: 0,
         end: 3,
       }),
-      duration: 4000,
-      delay: 500,
+      duration: 1000,
+      delay: 10,
       repeat: -1,
-    });
+    }).setScale(blockSize / 72);
     this.player.anims.play('walk');
   }
 
