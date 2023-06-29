@@ -2,7 +2,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
-"Love, Run and Robots" is crazy cyberpunk version of Google Chrome dino made with phaser.
+"Love, Run and Robots" is crazy cyberpunk runner-platformer game made with phaser.
 
 ## How to Download
 
@@ -13,5 +13,5 @@ Download this project from here [Download "Love, Run and Robots"](https://downgi
 Click on the [link](https://melfeynman.github.io/shinji/) to open the game. The objective of the game is to jump on blocks and dodge collisions.
 
 Controls:
-* Press Up arrow key to jump.
+* Press and hold Up arrow key to jump.
 * Press the key twice to jump higher.

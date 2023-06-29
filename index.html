@@ -49,9 +49,12 @@
   <div class="wrapper" id="end-screen">
     <div class="score-cell shadow">
         <div class="score-box">
-            <div class="score">
-                счёт:
-                <br>2450
+            <div class="score" style="font-size: 40pt; font-weight: bold;">
+              Ваш счет: <span id="test" >Некоторый текст</span>
+              <script>
+                const $finalScore = document.querySelector('#test');
+                const text = $finalScore.textContent; // 
+              </script>
             </div>
 
             <div class="score-sqr">
