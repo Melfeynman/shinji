@@ -23,4 +23,5 @@ export default new Phaser.Game ({
       debug: true,
     },
   },
+  pixelArt: true,
 })
