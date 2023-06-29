@@ -2,7 +2,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
-"Love, Run and Robots" is crazy cyberpunk version of Google Chrome dino made with phaser.
+"Love, Run and Robots" is crazy cyberpunk runner-platformer game made with phaser.
 
 ## How to Download
 
