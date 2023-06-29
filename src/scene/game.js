@@ -26,7 +26,7 @@ export default class Game extends Phaser.Scene {
   preload() {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
-    this.load.image('player-jump', 'assets/character/Punk_jump.png');
+    this.load.image('player-jump', 'assets/character/jump.jpg');
     this.load.spritesheet('player-run', 'assets/character/Punk_run.png', { frameWidth: 72, frameHeight: 48 });
   }
 
@@ -217,9 +217,12 @@ export default class Game extends Phaser.Scene {
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
     this.player = this.physics.add.sprite(playerX, playerY, 'player-jump')
-      .setScale(blockSize / 72)
-      .setSize(blockSize, blockSize)
+      .setOrigin(0, 0)
+      .setScale(blockSize / 1000)
+      .setDisplaySize(blockSize, blockSize)
       .setVelocityX(200);
+    // this.player.originX = 0;
+    // this.player.originY = 0;
     // this.player.setScale(4, 4);
     // this.player.anchor.setTo(0.5, 1.0); ?
     // this.game.physics.arcade.enable(this.player);
