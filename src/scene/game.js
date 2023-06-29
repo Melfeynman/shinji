@@ -239,40 +239,16 @@ export default class Game extends Phaser.Scene {
 
     var scoreFont = "70px Arial";
 
-    this.scoreLabel = this.add.text(this.cameras.main.centerX, 70, "0", { font: scoreFont, fill: "#fff" })
+    this.scoreLabel = this.add.text(this.cameras.main.leftX, 70, "0", { font: scoreFont, fill: "#fff" })
     this.scoreLabel.scrollFactorX = 0;
     // this.scoreLabel.anchor.setTo(0.5, 0.5);
     this.scoreLabel.align = 'center';
     // this.game.world.bringToTop(this.scoreLabel);
     this.scoreLabel.y = this.gridCoordinates.y.length - 2;
 
-    // выдаёт ошибку на this.game.world.centerX
-    /*
-    this.highestScore = this.add.text(this.game.world.centerX * 1.6, 70, "0", { font: scoreFont, fill: "#fff" });
-    this.highestScore.anchor.setTo(0.5, 0.5);
-    this.highestScore.align = 'right';
-    this.highestScore.scrollFactorX = 0;
-    this.highestScore.y = this.gridCoordinates.y.length - 2;
-
-    if (window.localStorage.getItem('Highest Score') == null) {
-      this.highestScore.setText(0);
-      window.localStorage.setItem('Highest Score', 0);
-    }
-    else {
-      this.highestScore.setText(window.localStorage.getItem('Highest Score'));
-    }
-    */
+    //*
   }
-  /*
-    incrementScore() {
-  
-      score += 1;
-      this.scoreLabel.setText(score);
-      this.game.world.bringToTop(this.scoreLabel);
-      this.highestScore.setText("HS: " + window.localStorage.getItem('Highest Score'));
-      this.game.world.bringToTop(this.highestScore);
-    }
-  */
+
   countTime() {
     // сравнивает текущее время с сохранённым временем начала игры
     // и выводит в this.scoreLabel отформатированную разницу
@@ -280,6 +256,6 @@ export default class Game extends Phaser.Scene {
     const strDiff = diff.toString();
     this.timer.mins = diff.getMinutes();
     this.timer.secs = diff.getSeconds();
-    this.scoreLabel.text = `${this.timer.mins}:${this.timer.secs}`;
+    this.scoreLabel.text = `Score: ${this.timer.mins * 60 + this.timer.secs}`;
   }
 }
