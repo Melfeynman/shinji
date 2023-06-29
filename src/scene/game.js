@@ -245,6 +245,7 @@ export default class Game extends Phaser.Scene {
     this.scoreLabel.align = 'center';
     // this.game.world.bringToTop(this.scoreLabel);
     this.scoreLabel.y = this.gridCoordinates.y.length - 2;
+    this.scoreLabel.depth = 100;
 
     //*
   }
