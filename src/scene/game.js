@@ -258,6 +258,6 @@ export default class Game extends Phaser.Scene {
     this.timer.mins = diff.getMinutes();
     this.timer.secs = diff.getSeconds();
     this.score = this.timer.mins * 60 + this.timer.secs;
-    this.scoreLabel.text = `Score: ${this.score}`;
+    this.scoreLabel.text = `Счет: ${this.score}`;
   }
 }
