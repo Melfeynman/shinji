@@ -11,6 +11,7 @@ export default class Start extends Phaser.Scene {
   }
 
   create() {
+    // скрывает .wrapper с экраном окончания игры
     endScreen.style.display = 'none';
     // показывает .wrapper c главным меню
     mainMenu.style.display = 'flex';
