@@ -26,6 +26,7 @@ export default class Game extends Phaser.Scene {
   preload() {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
+    this.load.image('player-run', 'assets/character/Punk_run.png');
   }
 
   create() {
@@ -51,6 +52,7 @@ export default class Game extends Phaser.Scene {
       .setVelocityX(200);
     this.cameras.main.startFollow(this.camerasCenter);
 
+    Phaser.Animations.AnimationManager.create();
     // создаёт игрока
     this.createPlayer();
     // добавляет коллизию между игроком и блоками
