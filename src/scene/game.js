@@ -26,6 +26,7 @@ export default class Game extends Phaser.Scene {
   preload() {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
+    this.load.image('player-jump', 'assets/character/Punk_jump.png');
     this.load.spritesheet('player-run', 'assets/character/Punk_run.png', { frameWidth: 72, frameHeight: 48 });
   }
 
@@ -215,7 +216,8 @@ export default class Game extends Phaser.Scene {
     // помещает игрока в центр на высоту 3его блока, задаёт размер блока и скорость в 200
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
-    this.player = this.physics.add.sprite(playerX, playerY, 'player-run')
+    this.player = this.physics.add.sprite(playerX, playerY, 'player-jump')
+      .setScale(blockSize / 72)
       .setSize(blockSize, blockSize)
       .setVelocityX(200);
     // this.player.setScale(4, 4);
@@ -232,6 +234,7 @@ export default class Game extends Phaser.Scene {
     this.player.body.drag.x = 1;
 
     // здесь будет анимация (?)
+    /*
     this.player.anims.create({
       key: 'walk',
       frames: this.player.anims.generateFrameNumbers('player-run', {
@@ -243,6 +246,7 @@ export default class Game extends Phaser.Scene {
       repeat: -1,
     }).setScale(blockSize / 72);
     this.player.anims.play('walk');
+    */
   }
 
   createScore() {
