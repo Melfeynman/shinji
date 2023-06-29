@@ -19,7 +19,7 @@ export default class Game extends Phaser.Scene {
   player;
   cursor;
   scoreLabel;
-  highestScore;
+  score;
   startTime;
   timer = { mins: 0, secs: 0 };
 
@@ -60,7 +60,7 @@ export default class Game extends Phaser.Scene {
     // добавляет управление
     this.cursor = this.input.keyboard.createCursorKeys();
     // добавляет текст сётчика сверху
-    this.createScore();
+    this.score = this.createScore();
   }
 
   update() {
@@ -115,11 +115,11 @@ export default class Game extends Phaser.Scene {
     this.countTime();
    
     if (this.player.x < this.cameras.main.scrollX - blockSize) {
-      this.scene.start('game-over');
+      this.scene.start('game-over', { score: this.score });
     }
     
     if (this.player.y > this.cameras.main.scrollY + vpheight) {
-      this.scene.start('game-over');
+      this.scene.start('game-over', { score: this.score });
     }
   }
 
@@ -257,6 +257,7 @@ export default class Game extends Phaser.Scene {
     const strDiff = diff.toString();
     this.timer.mins = diff.getMinutes();
     this.timer.secs = diff.getSeconds();
-    this.scoreLabel.text = `Score: ${this.timer.mins * 60 + this.timer.secs}`;
+    this.score = this.timer.mins * 60 + this.timer.secs;
+    this.scoreLabel.text = `Score: ${this.score}`;
   }
 }
