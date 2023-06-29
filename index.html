@@ -1,15 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>love+run+robots</title>
-  <link rel="stylesheet" href="style.css" type="text/css">
+  <link rel="stylesheet" href="./css/main.css" type="text/css">
+  <link rel="stylesheet" href="./css/null.css" type="text/css">
   <!-- импорт фейзера в проект со стороннего сервера напрямую -->
   <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
 </head>
+
 <body>
-  
+
+  <div class="wrapper" id="main-menu">
+    <div class="lap-start">
+      <div class="red-dottes">
+        <div class="red-dottes-inner">
+          <div class="red-box shadow-upLeft"></div>
+
+          <div class="red-box-dbl shadow-upLeft">
+            <div class="red-box"></div>
+            <div class="red-box"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="start-cell shadow">
+        <div class="start-btn-box">
+          <button class="start-btn">
+            <a class="arrow" href="#"></a>
+            <!-- Замените ссылку  -->
+          </button>
+        </div>
+
+        <div class="start-name">
+          Любовь,
+          <br>бег
+          <br>и роботы
+        </div>
+
+      </div>
+
+      <h2 class="turn-scrn">Пожалуйст, переверните экран</h2>
+    </div>
+  </div>
+
+  <div class="wrapper" id="end-screen">
+    <div class="score-cell shadow">
+        <div class="score-box">
+            <div class="score">
+                счёт:
+                <br>2450
+            </div>
+
+            <div class="score-sqr">
+                <div class="score-sqr-inner"></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
 </body>
 
 <!-- основной скрипт с фейзером -->
