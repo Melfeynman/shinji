@@ -26,7 +26,7 @@ export default class Game extends Phaser.Scene {
   preload() {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
-    this.load.spritesheet('player-run', 'assets/character/Punk_run.png');
+    this.load.spritesheet('player-run', 'assets/character/Punk_run.png', { frameWidth: 72, frameHeight: 48 });
   }
 
   create() {
@@ -232,7 +232,7 @@ export default class Game extends Phaser.Scene {
     this.player.body.drag.x = 1;
 
     // здесь будет анимация (?)
-    var walk = this.player.anims.create({
+    this.player.anims.create({
       key: 'walk',
       frames: this.player.anims.generateFrameNumbers('player-run', {
         start: 0,
@@ -242,7 +242,7 @@ export default class Game extends Phaser.Scene {
       delay: 500,
       repeat: -1,
     });
-    this.player.anims.play('walk', 20, true);
+    this.player.anims.play('walk');
   }
 
   createScore() {
