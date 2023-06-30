@@ -218,7 +218,7 @@ export default class Game extends Phaser.Scene {
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
     this.player = this.physics.add.sprite(playerX, playerY, 'player-jump')
-      .setOrigin(0, 0)
+      .setOrigin(0, 1)
       .setScale(blockSize / 1000)
       .setDisplaySize(blockSize, blockSize)
       .setVelocityX(200);
