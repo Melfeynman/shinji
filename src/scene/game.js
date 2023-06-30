@@ -26,6 +26,13 @@ export default class Game extends Phaser.Scene {
   preload() {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
+    this.load.image('player-jump', 'assets/character/jump.png');
+    this.load.image('run1', 'assets/character/run1.png');
+    this.load.image('run2', 'assets/character/run2.png');
+    this.load.image('run3', 'assets/character/run3.png');
+    this.load.image('run4', 'assets/character/run4.png');
+    this.load.image('run5', 'assets/character/run5.png');
+    this.load.image('run6', 'assets/character/run6.png');
   }
 
   create() {
@@ -214,9 +221,13 @@ export default class Game extends Phaser.Scene {
     // помещает игрока в центр на высоту 3его блока, задаёт размер блока и скорость в 200
     const playerX = this.cameras.main.centerX;
     const playerY = this.gridCoordinates.y[2];
-    this.player = this.physics.add.sprite(playerX, playerY)
-      .setSize(blockSize.blockSize)
+    this.player = this.physics.add.sprite(playerX, playerY, 'player-jump')
+      .setOrigin(0, 0)
+      .setScale(blockSize / 1000)
+      .setDisplaySize(blockSize, blockSize)
       .setVelocityX(200);
+    // this.player.originX = 0;
+    // this.player.originY = 0;
     // this.player.setScale(4, 4);
     // this.player.anchor.setTo(0.5, 1.0); ?
     // this.game.physics.arcade.enable(this.player);
@@ -230,9 +241,45 @@ export default class Game extends Phaser.Scene {
     this.player.body.bounce.y = 0.1;
     this.player.body.drag.x = 1;
 
-    // здесь будет анимация (?)
-    // var walk = this.player.anims.create('walk');
-    // this.player.anims.play('walk', 20, true);
+    this.player.anims.create({
+      key: 'walk',
+      frames: [
+        {
+          key: 'run1',
+          frame: 1,
+          visible: false,
+        },
+        {
+          key: 'run2',
+          frame: 2,
+          visible: false,
+        },
+        {
+          key: 'run3',
+          frame: 3,
+          visible: false,
+        },
+        {
+          key: 'run4',
+          frame: 4,
+          visible: false,
+        },
+        {
+          key: 'run5',
+          frame: 5,
+          visible: false,
+        },
+        {
+          key: 'run6',
+          frame: 6,
+          visible: false,
+        }
+      ],
+      duration: 1000,
+      delay: 10,
+      repeat: -1,
+    });
+    this.player.anims.play('walk');
   }
 
   createScore() {
