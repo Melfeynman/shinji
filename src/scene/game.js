@@ -26,7 +26,7 @@ export default class Game extends Phaser.Scene {
   preload() {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
-    this.load.image('player-jump', 'assets/character/jump.jpg');
+    this.load.image('player-jump', 'assets/character/jump.png');
     this.load.spritesheet('player-run', 'assets/character/Punk_run.png', { frameWidth: 72, frameHeight: 48 });
   }
 
