@@ -27,7 +27,12 @@ export default class Game extends Phaser.Scene {
     // надо заменить фон позднее
     this.load.image('background', 'assets/test-image.jpg');
     this.load.image('player-jump', 'assets/character/jump.png');
-    this.load.spritesheet('player-run', 'assets/character/Punk_run.png', { frameWidth: 72, frameHeight: 48 });
+    this.load.image('run1', 'assets/character/run1.png');
+    this.load.image('run2', 'assets/character/run2.png');
+    this.load.image('run3', 'assets/character/run3.png');
+    this.load.image('run4', 'assets/character/run4.png');
+    this.load.image('run5', 'assets/character/run5.png');
+    this.load.image('run6', 'assets/character/run6.png');
   }
 
   create() {
@@ -236,20 +241,45 @@ export default class Game extends Phaser.Scene {
     this.player.body.bounce.y = 0.1;
     this.player.body.drag.x = 1;
 
-    // здесь будет анимация (?)
-    /*
     this.player.anims.create({
       key: 'walk',
-      frames: this.player.anims.generateFrameNumbers('player-run', {
-        start: 0,
-        end: 3,
-      }),
+      frames: [
+        {
+          key: 'run1',
+          frame: 1,
+          visible: false,
+        },
+        {
+          key: 'run2',
+          frame: 2,
+          visible: false,
+        },
+        {
+          key: 'run3',
+          frame: 3,
+          visible: false,
+        },
+        {
+          key: 'run4',
+          frame: 4,
+          visible: false,
+        },
+        {
+          key: 'run5',
+          frame: 5,
+          visible: false,
+        },
+        {
+          key: 'run6',
+          frame: 6,
+          visible: false,
+        }
+      ],
       duration: 1000,
       delay: 10,
       repeat: -1,
-    }).setScale(blockSize / 72);
+    });
     this.player.anims.play('walk');
-    */
   }
 
   createScore() {
