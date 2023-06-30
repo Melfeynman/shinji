@@ -25,7 +25,7 @@ export default class Game extends Phaser.Scene {
 
   preload() {
     // надо заменить фон позднее
-    this.load.image('background', 'assets/mainBack.png');
+    this.load.image('background', 'assets/test-image.jpg');
     this.load.image('player-jump', 'assets/character/jump.png');
     this.load.image('run1', 'assets/character/run1.png');
     this.load.image('run2', 'assets/character/run2.png');
@@ -40,7 +40,8 @@ export default class Game extends Phaser.Scene {
     // запоминаем время начала игры
     this.startTime = Date.now();
     this.background = this.add.image(Math.round(vpwidth / 2), Math.round(vpheight / 2), 'background')
-      .setScrollFactor(0.1, 0);
+      .setScrollFactor(0, 0)
+      .setDisplaySize(vpwidth, vpwidth);
     // создаёт грид-сетку
     this.makeGrid();
     // объявляет группу статических элементов в this.blocks
@@ -71,6 +72,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
+    // изменяет размер фона при изменении вьюпорта
     const mostRightGridX = this.gridCoordinates.x[this.gridCoordinates.x.length - 1];
     // проверяет посленюю колонку на наличие блоков и вызывает генератор
     this.checkLastGridColumn(mostRightGridX);
