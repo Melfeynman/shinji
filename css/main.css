@@ -28,7 +28,7 @@ body {
 
 }
 
-.red-dottes {
+/*.red-dottes {
     width: 30%;
     border: 5px dashed red;
 }
@@ -62,7 +62,7 @@ body {
     transform: translate(-50%, -50%);
     background-color: var(--dark-color);
 }
-
+*/
 .start-cell {
     display: flex;
     background-color: black;
