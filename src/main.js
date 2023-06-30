@@ -20,7 +20,7 @@ export default new Phaser.Game ({
       },
       // визуализация направления движения и скорости
       // нужно заменить на false после завершения разработки
-      debug: true,
+      debug: false,
     },
   },
   pixelArt: true,
